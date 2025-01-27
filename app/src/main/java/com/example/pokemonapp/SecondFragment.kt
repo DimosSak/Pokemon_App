@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import android.util.Log
 class SecondFragment : Fragment() {
     private lateinit var viewModel: PokemonViewModel
     private lateinit var recyclerView: RecyclerView
@@ -113,16 +112,6 @@ class SecondFragment : Fragment() {
                 searchResultsAdapter.updatePokemons(searchResults) // Update the search results adapter
             }
         })
-
-        viewModel.loading.observe(viewLifecycleOwner, { isLoading ->
-            // Show or hide loading indicator
-            if (isLoading) {
-                // Show loading indicator (e.g., ProgressBar)
-            } else {
-                // Hide loading indicator
-            }
-        })
-
         viewModel.errorMessage.observe(viewLifecycleOwner, { message ->
             message?.let {
                 showError(it)

@@ -4,6 +4,8 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.Url
+
 
 interface PokemonApi {
     @GET("type/{type}")
@@ -13,7 +15,7 @@ interface PokemonApi {
 
     @GET("pokemon/{id}")
     fun getPokemonDetail(@Path("id") id: Int): Call<PokemonDetail>
-    @GET("pokemon/{name}")
-    fun getPokemonDetailByName(@Path("name") name: String): Call<PokemonDetail>
+    @GET
+    fun getPokemonDetails(@Url pokemonUrl: String): Call<PokemonDetail> // Fetch Pokémon details
 
 }

@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -21,7 +20,6 @@ class PokemonDetailFragment : Fragment() {
     private lateinit var hpTextView: TextView
     private lateinit var attackTextView: TextView
     private lateinit var defenseTextView: TextView
-    private lateinit var imagePlaceholder: TextView // New TextView for the placeholder
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,7 +32,6 @@ class PokemonDetailFragment : Fragment() {
         hpTextView = view.findViewById(R.id.pokemon_hp)
         attackTextView = view.findViewById(R.id.pokemon_attack)
         defenseTextView = view.findViewById(R.id.pokemon_defense)
-        imagePlaceholder = view.findViewById(R.id.image_placeholder) // Initialize the placeholder TextView
 
         // Retrieve the Pokémon URL from Safe Args
         val args: PokemonDetailFragmentArgs by navArgs()
@@ -52,15 +49,7 @@ class PokemonDetailFragment : Fragment() {
         viewModel.pokemonDetail.observe(viewLifecycleOwner, { detail ->
             if (detail != null) {
                 nameTextView.text = detail.name
-
-                // Check if the image URL is null
-                if (detail.sprites.front_default != null) {
-                    Glide.with(this).load(detail.sprites.front_default).into(imageView)
-                    imagePlaceholder.visibility = View.GONE // Hide placeholder if image is available
-                } else {
-                    imageView.setImageDrawable(null) // Clear the image view
-                    imagePlaceholder.visibility = View.VISIBLE // Show placeholder message
-                }
+                Glide.with(this).load(detail.sprites.front_default).into(imageView)
 
                 // Log the stats to see if they are populated
                 Log.d("PokemonDetailFragment", "Stats: ${detail.stats}")
@@ -86,9 +75,7 @@ class PokemonDetailFragment : Fragment() {
             }
         })
     }
-
     private fun showError(message: String) {
-        // Show a Toast message for error handling
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        // Handle error (e.g., show a Toast)
     }
 }

@@ -11,7 +11,11 @@
     <string name="pokemon_attack">Attack: 0</string>
     <string name="pokemon_defense">Defense: 0</string>
     <string name="pokemon_image_content_description">Pokémon Image</string>
+    <string name="image_not_available">Image not available</string>
+    <string name="search_pokemon_by_name">Search Pokémon by name</string>
     <string name="fab_description">Add Pokémon</string>
+    <string name="pokemon_list"> Pokémon List</string>
+    <string name="load_more">Load More</string>
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus

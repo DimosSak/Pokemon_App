@@ -7,10 +7,13 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class PokemonAdapter(
     private val pokemonList: MutableList<Pokemon>,
-    private val onClick: (String) -> Unit // Click listener for item clicks
+    private val onClick: (String) -> Unit
 ) : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() {
 
     class PokemonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -26,17 +29,31 @@ class PokemonAdapter(
     override fun onBindViewHolder(viewHolder: PokemonViewHolder, position: Int) {
         val pokemon = pokemonList[position]
         viewHolder.nameTextView.text = pokemon.name
-        Glide.with(viewHolder.itemView.context).load(pokemon.url).into(viewHolder.imageView)
 
-        // Set click listener to navigate to details
+        // Fetch Pokémon details to get the image
+        ApiClient.instance.getPokemonDetails(pokemon.url).enqueue(object : Callback<PokemonDetail> {
+            override fun onResponse(call: Call<PokemonDetail>, response: Response<PokemonDetail>) {
+                if (response.isSuccessful) {
+                    val imageUrl = response.body()?.sprites?.front_default
+                    Glide.with(viewHolder.itemView.context)
+                        .load(imageUrl) // Load the image into the ImageView
+                        .placeholder(R.drawable.ic_launcher_foreground) // Placeholder image
+                        .into(viewHolder.imageView)
+                }
+            }
+
+            override fun onFailure(call: Call<PokemonDetail>, t: Throwable) {
+                // Handle failure (optional: show a placeholder or log the error)
+            }
+        })
+
+        // Handle click events
         viewHolder.itemView.setOnClickListener {
-            onClick(pokemon.url) // Use the click listener passed to the adapter
+            onClick(pokemon.url)
         }
     }
 
-    override fun getItemCount(): Int {
-        return pokemonList.size
-    }
+    override fun getItemCount(): Int = pokemonList.size
 
     fun addPokemons(newPokemons: List<Pokemon>) {
         val startPosition = pokemonList.size
@@ -45,8 +62,8 @@ class PokemonAdapter(
     }
 
     fun updatePokemons(newPokemons: List<Pokemon>) {
-        pokemonList.clear() // Clear the existing list
-        pokemonList.addAll(newPokemons) // Add the new list
-        notifyDataSetChanged() // Notify the adapter to refresh the view
+        pokemonList.clear()
+        pokemonList.addAll(newPokemons)
+        notifyDataSetChanged()
     }
 }
